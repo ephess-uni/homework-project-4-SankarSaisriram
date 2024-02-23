@@ -39,6 +39,7 @@ def add_date_range(values, start_date):
 def fees_report(infile, outfile):
     """Calculates late fees per patron id and writes a summary report to
     outfile."""
+    # Dictionary to store late fees for each patron
     late_fees = defaultdict(float)
 
     # Read input file and calculate late fees
@@ -46,7 +47,7 @@ def fees_report(infile, outfile):
         reader = DictReader(file)
         for row in reader:
             date_due = datetime.strptime(row['date_due'], '%m/%d/%Y')
-            date_returned = datetime.strptime(row['date_returned'], '%m/%d/%y')
+            date_returned = datetime.strptime(row['date_returned'], '%m/%d/%Y')
             if date_returned > date_due:
                 days_late = (date_returned - date_due).days
                 late_fee = days_late * 0.25
@@ -58,7 +59,6 @@ def fees_report(infile, outfile):
         writer.writeheader()
         for patron_id, fee in late_fees.items():
             writer.writerow({'patron_id': patron_id, 'late_fees': "{:.2f}".format(fee)})
-
 
 
 # The following main selection block will only run when you choose
